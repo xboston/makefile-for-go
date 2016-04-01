@@ -4,24 +4,23 @@ FILE_NAME := $(shell basename $(CURDIR))
 
 default: build
 
-build: clean check fast strip
-	@(echo "-> Binary created & clean")
+build: clean check fast
+	@(echo "-> Binary created")
 
 fast:
 	@(echo "-> Compiling binary")
-	go build -o $(BIN_DIR)/$(FILE_NAME) main.go
-
-strip:
-	@(echo "-> Cleaning binary")
-	strip $(BIN_DIR)/$(FILE_NAME)
+	go build -ldflags "-s" -o $(BIN_DIR)/$(FILE_NAME) main.go
 
 clean:
 	@(echo "-> Cleaning file")
 	rm -f $(BIN_DIR)/*
 
-check:
+fmt:
 	@(echo "-> Preparing code")
 	go fmt ./...
+
+check: fmt
+	@(echo "-> Cheking code")
 	go vet ./...
 	golint ./...
 	errcheck ./...
@@ -31,6 +30,7 @@ check:
 	deadcode .
 	ineffassign .
 	go tool vet --shadow ./*.go
+	dupl -plumbing -t 50 .
 #	gometalinter ./...
 
 init:
