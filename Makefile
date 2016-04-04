@@ -31,6 +31,9 @@ check: fmt
 	ineffassign .
 	go tool vet --shadow ./*.go
 	dupl -plumbing -t 50 .
+	depscheck .
+	gosimple ./...
+	interfacer ./...
 #	gometalinter ./...
 
 init:
