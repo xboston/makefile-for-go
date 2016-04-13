@@ -18,6 +18,7 @@ clean:
 fmt:
 	@(echo "-> Preparing code")
 	go fmt ./...
+	gofmt -w -s .
 
 check: fmt
 	@(echo "-> Cheking code")
@@ -29,7 +30,7 @@ check: fmt
 	aligncheck ./...
 	deadcode .
 	ineffassign .
-	go tool vet --shadow ...
+	go tool vet --shadow .
 	dupl -plumbing -t 50 .
 	depscheck .
 	gosimple ./...
